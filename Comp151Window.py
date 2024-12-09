@@ -8,6 +8,7 @@ class Comp151Window(arcade.Window):
         self.target = None
         self.dX = 0
         self.dY = 0
+        self.sound = None
 
     def setup(self):
         arcade.set_background_color(arcade.color.LIGHT_GRAY)
@@ -16,6 +17,7 @@ class Comp151Window(arcade.Window):
         self.player.center_x = 1000
         self.player.center_y = 1000
         self.setupGoblins()
+        self.sound = arcade.load_sound("sound1.ogg")
 
     def setupGoblins(self):
         for i in range(10):
@@ -38,6 +40,15 @@ class Comp151Window(arcade.Window):
             self.player.center_y = 61
         elif self.player.center_x < 60:
             self.player.center_x = 61
+        self.checkForCollision()
+
+    def checkForCollision(self):
+        collisions = arcade.check_for_collision_with_list(self.player, self.target)
+        if collisions:
+            for dead_goblin in collisions:
+                self.target.remove(dead_goblin)
+            arcade.play_sound(self.sound)
+
 
     def on_draw(self):
         arcade.start_render()
